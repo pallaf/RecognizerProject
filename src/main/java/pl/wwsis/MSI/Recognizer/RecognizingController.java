@@ -168,7 +168,8 @@ public class RecognizingController
 			if (getImage() == null){
 				imageOpening();
 			}else{
-//			model.getRecognitionResult(getImage());
+				String result = model.getRecognitionResult(getImage());
+				JOptionPane.showMessageDialog(null, "The number on the image is: " + result,"Result",JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 	}
@@ -199,7 +200,8 @@ public class RecognizingController
 		public void actionPerformed(ActionEvent e)
 		{
 //			new ImageRecognition().getRecognitionResult(getImage());
-			model.getRecognitionResult(getImage());
+			String result = model.getRecognitionResult(getImage());
+			JOptionPane.showMessageDialog(null, "The number on the image is: " + result,"Result",JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 	
