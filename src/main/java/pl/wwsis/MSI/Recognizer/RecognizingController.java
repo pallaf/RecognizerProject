@@ -38,7 +38,9 @@ public class RecognizingController
 	private Recognize		rcg;
 	private RecognizeButton	rcgButton;
 	//recognize variable
+	@SuppressWarnings("unused")
 	private String			stat_path = "";
+	@SuppressWarnings("unused")
 	private String			stat_name = "";
 	//loading image variable
 	private File imageFile;
@@ -48,6 +50,7 @@ public class RecognizingController
 	 *@param aView  A GUI class, to be saved as view
 	 *@param aModel A model class, to be saved as model
 	 */
+// ---------------------------------------------------------------------------------------------------------------
 	public RecognizingController(RecognizingView aView, Recognizing aModel)
 	{
 		//program variables
@@ -83,6 +86,7 @@ public class RecognizingController
 	/*
 	 *Updates the single panel to display the Open View.
 	 */
+// ---------------------------------------------------------------------------------------------------------------
 	private void open_view()
 	{
 		update();
@@ -93,6 +97,7 @@ public class RecognizingController
 	/*
 	 *Updates the single panel to display the Recognize View.
 	 */
+// ---------------------------------------------------------------------------------------------------------------
 	private void recognize_view()
 	{
 		update();
@@ -103,6 +108,7 @@ public class RecognizingController
 	/*
 	 *Opens file chooser to enter the image and display the recognize View.
 	 */
+// ---------------------------------------------------------------------------------------------------------------
 	private void imageOpening()
 	{
 		//start path of displayed File Chooser
@@ -129,6 +135,7 @@ public class RecognizingController
 	/*
 	 * 
 	 */
+// ---------------------------------------------------------------------------------------------------------------
 	private void setImage(File file) {
 		imageFile = file;
 	}
@@ -136,6 +143,7 @@ public class RecognizingController
 	/*
 	 * 
 	 */
+// ---------------------------------------------------------------------------------------------------------------
 	private File getImage(){
 		return imageFile;
 	}
@@ -143,6 +151,8 @@ public class RecognizingController
 	/*
 	 *Open Class - handles the Open menu item
 	 */
+	
+// ---------------------------------------------------------------------------------------------------------------	
 	private class Open implements ActionListener
 	{
 		/*
@@ -158,6 +168,8 @@ public class RecognizingController
 	/*
 	 *Recognize Class - handles the chars recognizing
 	 */
+	
+// ---------------------------------------------------------------------------------------------------------------	
 	private class Recognize implements ActionListener
 	{
 		/*
@@ -177,6 +189,8 @@ public class RecognizingController
 	/*
 	 *Exit Class - handles the Exit menu item
 	 */
+	
+// ---------------------------------------------------------------------------------------------------------------	
 	private class Exit implements ActionListener
 	{
 		/*
@@ -192,6 +206,8 @@ public class RecognizingController
 	/*
 	 *Recognize Button Class - handles the Recognize Button item
 	 */
+	
+// ---------------------------------------------------------------------------------------------------------------	
 	private class RecognizeButton implements ActionListener
 	{
 		/*
@@ -209,6 +225,8 @@ public class RecognizingController
 	/*
 	 *Updates the variables to an initial state
 	 */
+	
+// ---------------------------------------------------------------------------------------------------------------		
 	public void update()
 	{
 		image_input.setIcon(null);	//clear image
@@ -219,6 +237,8 @@ public class RecognizingController
 	/*
 	 *Main Method for testing
 	 */
+	
+// ---------------------------------------------------------------------------------------------------------------	
 	public static void main(String args[]) throws IOException
 	{
 		new RecognizingController(

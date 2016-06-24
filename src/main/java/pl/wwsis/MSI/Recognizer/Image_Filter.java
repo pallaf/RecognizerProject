@@ -3,13 +3,14 @@ import java.io.*;
 
 public class Image_Filter extends javax.swing.filechooser.FileFilter
 {
-	
+
+// ---------------------------------------------------------------------------------------------------------------	
 	protected boolean isImageFile(String extension)
 	{
 		return (extension.equals("jpg")||extension.equals("png"));
 	}
 	
-	
+// ---------------------------------------------------------------------------------------------------------------	
 	public boolean accept(File file)
 	{
 	    if (file.isDirectory())
@@ -25,13 +26,13 @@ public class Image_Filter extends javax.swing.filechooser.FileFilter
 		return false;
 	}
 	
-	
+// ---------------------------------------------------------------------------------------------------------------	
 	public String getDescription()
 	{
 		return "Supported Image Files";
 	}
 	
-	
+// ---------------------------------------------------------------------------------------------------------------	
 	protected static String getExtension(File file)
 	{
 		String name = file.getName();

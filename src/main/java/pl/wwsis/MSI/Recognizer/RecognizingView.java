@@ -29,11 +29,13 @@ public class RecognizingView extends JFrame
 	private static int HEIGHT = 400;
 	
 	//elements for JPanel
+	@SuppressWarnings("unused")
 	private JScrollBar 	scroll;
 	private JButton		recognizeButton;
 	private JLabel		image_input;
 	
 	//elements for Menu
+	@SuppressWarnings("unused")
 	private JMenu 		file;
 	private JMenuItem 	open;
 	private JMenuItem 	recognize;
@@ -43,6 +45,7 @@ public class RecognizingView extends JFrame
 	 *Constructor for RecognizingView class
 	 *@param name Used to set the title on the JFrame
 	 */
+// ---------------------------------------------------------------------------------------------------------------	
 	public RecognizingView(String name)
 	{
 		//set the title of the JFrame
@@ -72,35 +75,44 @@ public class RecognizingView extends JFrame
 	/*
 	 *@return The menu item 'Open'
 	 */
+// ---------------------------------------------------------------------------------------------------------------	
 	public JMenuItem	getOpen()		{ return open;			}
 	/*
 	 *@return The menu item 'Recognize'
 	 */
-	public JMenuItem	getRecognize()		{ return recognize;			}
+// ---------------------------------------------------------------------------------------------------------------	
+	public JMenuItem	getRecognize()	{ return recognize;			}
 	/*
 	 *@return The menu item 'Exit'
 	 */
+// ---------------------------------------------------------------------------------------------------------------	
 	public JMenuItem	getExit()		{ return exit;				}
 	/*
 	 *@return The JLabel containing the image to recognize text from
 	 */
+// ---------------------------------------------------------------------------------------------------------------	
 	public JLabel		getImageInput()	{ return image_input;		}
 	/*
 	 *@return The JPanel displaying the Open View - open panel
 	 */
+// ---------------------------------------------------------------------------------------------------------------	
 	public JPanel		getOpenPanel()	{ return new Open_Panel();	}
 	/*
 	 *@return The JPanel displaying the Recognize View - image panel
-	 */
+	 */	
+// ---------------------------------------------------------------------------------------------------------------	
 	public JPanel		getImagePanel()	{ return new Image_Panel();	}
 	/*
 	 *@return The Recognize button
 	 */
+// ---------------------------------------------------------------------------------------------------------------	
 	public JButton		getRButton()	{ return recognizeButton;		}
 	
 	/*
 	 *Class Open_Panel
 	 */
+// ---------------------------------------------------------------------------------------------------------------	
+	@SuppressWarnings("serial")
 	private class Open_Panel extends JPanel
 	{
 		
@@ -115,6 +127,8 @@ public class RecognizingView extends JFrame
 	/*
 	 *Class Image_Panel
 	 */
+// ---------------------------------------------------------------------------------------------------------------	
+	@SuppressWarnings("serial")
 	private class Image_Panel extends JPanel
 	{
 		/*
@@ -160,6 +174,7 @@ public class RecognizingView extends JFrame
 	/*
 	 *Main Method for testing
 	 */
+// ---------------------------------------------------------------------------------------------------------------	
 	public static void main(String args[])
 	{
 		new RecognizingView("Recognizing");

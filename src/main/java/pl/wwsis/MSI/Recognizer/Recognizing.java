@@ -51,9 +51,12 @@ public class Recognizing
 	
 	private File file = new File(filePath);
 
-	private ImageRecognitionPlugin imageRecognition;
+	private static ImageRecognitionPlugin imageRecognition;
+	@SuppressWarnings({ "unused", "rawtypes" })
 	private NeuralNetwork nnet, nnet1, nnet2, nnet3, nnet4, nnet5, nnet6, nnet7;
+	@SuppressWarnings("rawtypes")
 	private Set<NeuralNetwork> nnett = new HashSet<NeuralNetwork>();
+	@SuppressWarnings("unused")
 	private InputStream nnetStream;
 	
 	private Map<String, Double> resultsMap = new TreeMap<String, Double>();
@@ -67,6 +70,7 @@ public class Recognizing
 	 *Neural Network loaded from recourses (opened stream) 
 	 *@param nnet				The neural network for the recognition
 	 */
+// ---------------------------------------------------------------------------------------------------------------	
 	public Recognizing() throws IOException
 	{
 //		setFilePathes();
@@ -120,6 +124,7 @@ public class Recognizing
 	 *@param String 		file	Path of the already created neural network	
 	 *@param NeuralNetwork 	nnet	The neural network for the recognition
 	 */
+// ---------------------------------------------------------------------------------------------------------------		
     public Recognizing(String file){
     	try 
 		{
@@ -132,7 +137,6 @@ public class Recognizing
     		    	nnett.add(NeuralNetwork.createFromFile(f));
     		    }
     		}
-//    		nnet = NeuralNetwork.createFromFile(file);
 		}
 		catch(Exception e) 
 		{
@@ -142,7 +146,6 @@ public class Recognizing
 		}
     }
 	
-
 	/*
 	 *Recognize an image with number, the output will be a recognized number 
 	 *@param nnet				The neural network for the recognition
@@ -151,47 +154,29 @@ public class Recognizing
 	 *@param maxValueInMap 		The max value in the Hashmap
 	 *@param entry 				Used param for iteration of the through hashmap
 	 */
-			
+ // ---------------------------------------------------------------------------------------------------------------				
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	String getRecognitionResult(File image)
 	{
 		if(file.exists())
 		{
 			try {
-				String result = ""; int i = 0;
 				resultsMap.clear();
+				sortedMapAsc.clear();
 				for (NeuralNetwork nn : nnett )
 				{	
-					i++;
 					imageRecognition = (ImageRecognitionPlugin)nn.getPlugin(ImageRecognitionPlugin.class);
-					if (i != 1){result += ", ";};
 					getNumRecoForEachFont(imageRecognition, image);
-//					result += getNumRecoForEachFont(imageRecognition, image);
 				}
 				lookingForResult();
-				Double maxValueInMap=(Collections.max(resultsMap.values()));
-				for (Entry<String, Double> entry : resultsMap.entrySet()) {
+				Double maxValueInMap=(Collections.max(sortedMapAsc.values()));
+				for (Entry<String, Double> entry : sortedMapAsc.entrySet()) {
 		            if (entry.getValue().equals(maxValueInMap)) {
 //		            	log.log( Level.FINE, "Koncowy wynik rozpoznawania: " + entry.getKey() + ": " + entry.getValue());
 		                return entry.getKey() + ": " + entry.getValue();
 		            }
 				}
-//				System.out.println(result);
-//				return result;
 				return null;
-				
-//				imageRecognition = (ImageRecognitionPlugin)nnet.getPlugin(ImageRecognitionPlugin.class);
-//				//image recognition is done here (specify some existing image file)
-//				HashMap<String, Double> outputMap = imageRecognition.recognizeImage(image);
-//				Double maxValueInMap=(Collections.max(outputMap.values()));
-////				System.out.println(outputMap.toString());
-//				for (Entry<String, Double> entry : outputMap.entrySet()) {
-//		            if (entry.getValue()==maxValueInMap) {
-//		                System.out.println(entry.getKey());
-//		                return entry.getKey();
-//		            }
-//		        }
-////				return outputMap.toString();
-//		        return null;
 			}
 			catch(Exception e) 
 			{
@@ -207,43 +192,37 @@ public class Recognizing
 		}
 	}
 	
+// ---------------------------------------------------------------------------------------------------------------		
 	private void getNumRecoForEachFont(ImageRecognitionPlugin imageRecognition, File image){
 		
 		try {
-			sortedMapAsc.clear();
-//			imageRecognition = (ImageRecognitionPlugin)nnet.getPlugin(ImageRecognitionPlugin.class);
 			//image recognition is done here (specify some existing image file)
 			HashMap<String, Double> outputMap = imageRecognition.recognizeImage(image);
 			Double maxValueInMap=(Collections.max(outputMap.values()));
-//			System.out.println(outputMap.toString());
-			
 			for (Entry<String, Double> entry : outputMap.entrySet()) {
 	            if (entry.getValue()==maxValueInMap) {
 	                System.out.println(entry.getKey() + ", " + entry.getValue() + ", " + imageRecognition.getParentNetwork().toString());
 	            	resultsMap.put(entry.getKey(), entry.getValue());
-//	                return entry.getKey() + ": " + entry.getValue();
 	            }
 	        }
 			sortedMapAsc = sortByComparator(resultsMap);
 //			log.log( Level.FINE, "Rezultaty z rozpoznawania dla sieci " + imageRecognition.getParentNetwork().toString() + ": " + resultsMap , resultsMap.size());
-//			return outputMap.toString();
-//	        return null;
 		}
 		catch(Exception e) 
 		{
 //			log.log( Level.SEVERE, e.toString(), e);
 			e.printStackTrace();
 		}
-//		return null;
 	}
 	
 	
+// ---------------------------------------------------------------------------------------------------------------		
 	void setFilePathes(){
 		
 		File folder = new File(filePathToFolder);
 		File[] listOfFiles = folder.listFiles();
 
-		for (String s : filePathes) {
+		for (@SuppressWarnings("unused") String s : filePathes) {
 			for (File f : listOfFiles) {
 				if (f.isFile()) {
 					if(Image_Filter.getExtension(f).equals("nnet"))
@@ -253,8 +232,10 @@ public class Recognizing
 		}
 	}
 	
+// ---------------------------------------------------------------------------------------------------------------		
 	private void lookingForResult(){
 		resultsAvrMap.clear();
+		@SuppressWarnings("unused")
 		Double maxValueInMap=(Collections.max(resultsMap.values()));
 		for (Entry<String, Double> entry : resultsMap.entrySet()) {
             if (entry.getValue()>0.8) {
@@ -265,6 +246,7 @@ public class Recognizing
 		System.out.println(mostDuplKey());
 	}
 	
+// ---------------------------------------------------------------------------------------------------------------	
 	private Set<String> mostDuplKey(){
 		for (Entry<String, Double> entry : resultsAvrMap.entrySet()) {
             dupliList.add(entry.getKey());
@@ -272,7 +254,8 @@ public class Recognizing
 //		log.log( Level.FINE, "Zwraca mape z elementami duplikowanymi: " + dupliList , dupliList.size() );
 		return findDuplicates(dupliList);
 	}
-
+	
+// ---------------------------------------------------------------------------------------------------------------
 	private Set<String> findDuplicates(List<String> listContainingDuplicates) {
 			 
 		Set<String> setToReturn = new HashSet<String>();
@@ -286,17 +269,9 @@ public class Recognizing
 		return setToReturn;
 	}
 	
-//	Comparator<String> valueComparator =  new Comparator<String>() {
-//        public int compare(String k1, String k2) {
-//            int compare = map.get(k2).compareTo(map.get(k1));
-//            if (compare == 0) return 1;
-//            else return compare;
-//        }
-//    };
-	
+// ---------------------------------------------------------------------------------------------------------------	
 	private static Map<String, Double> sortByComparator(Map<String, Double> unsortMap)
     {
-
         List<Entry<String, Double>> list = new LinkedList<Entry<String, Double>>(unsortMap.entrySet());
 
         // Sorting the list based on values
@@ -318,21 +293,13 @@ public class Recognizing
 
         return sortedMap;
     }
-	
-//	private BufferedImage getImage(File f)
-//	{
-//		BufferedImage 	image	= null;
-//		
-//		try
-//		{
-//			image = ImageIO.read(f);
-//			
-//		}
-//		catch(Exception ex) 
-//		{
-//			JOptionPane.showMessageDialog(null, "Image could not be read!","Error",JOptionPane.ERROR_MESSAGE);
-//			ex.printStackTrace();
-//		}
-//		return image;
-//	}
+
+// ---------------------------------------------------------------------------------------------------------------		
+	public static void printMap(Map<String, Double> sortedMapAsc2)
+    {
+        for (Entry<String, Double> entry : sortedMapAsc2.entrySet())
+        {
+        	System.out.println(entry.getKey() + ", " + entry.getValue());
+        }
+    }
 }
