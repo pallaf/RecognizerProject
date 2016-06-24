@@ -22,8 +22,8 @@ import org.neuroph.core.NeuralNetwork;
  */
 public class Recognizing
 {
-//	private String filePath = "/Recognizer/src/main/java/pl/wwsis/MSI/Resources/recognizing_net.nnet";
-	private String filePath = "D:\\Git\\Rep\\Recognizer\\src\\main\\java\\pl\\wwsis\\MSI\\Resources\\recognizing_net.nnet";
+//	private String filePath = "D:\\Git\\Rep\\Recognizer\\src\\main\\java\\pl\\wwsis\\MSI\\Resources\\recognizing_net.nnet";
+	private String filePath = "D:\\Git\\Rep\\Recognizer\\src\\main\\java\\pl\\wwsis\\MSI\\Resources\\firstNN.nnet";
 	private String filePath1 = "D:\\Git\\Rep\\Recognizer\\src\\main\\java\\pl\\wwsis\\MSI\\Resources\\calibri_net.nnet";
 	private String filePath2 = "D:\\Git\\Rep\\Recognizer\\src\\main\\java\\pl\\wwsis\\MSI\\Resources\\chiller_net.nnet";
 	private String filePath3 = "D:\\Git\\Rep\\Recognizer\\src\\main\\java\\pl\\wwsis\\MSI\\Resources\\handwitten_net.nnet";
@@ -32,7 +32,7 @@ public class Recognizing
 	private File file = new File(filePath);
 
 	private ImageRecognitionPlugin imageRecognition;
-	private NeuralNetwork nnet, nnet1, nnet2, nnet3, nnet4;
+	private NeuralNetwork nnet, nnet1, nnet2, nnet3, nnet4, nnet5;
 	private Set<NeuralNetwork> nnett = new HashSet<NeuralNetwork>();
 	private InputStream nnetStream;
 	
@@ -45,11 +45,14 @@ public class Recognizing
 	 */
 	public Recognizing() throws IOException
 	{
+
+		
 		FileInputStream stream = new FileInputStream(filePath);
 		FileInputStream stream1 = new FileInputStream(filePath1);
 		FileInputStream stream2 = new FileInputStream(filePath2);
 		FileInputStream stream3 = new FileInputStream(filePath3);
 		FileInputStream stream4 = new FileInputStream(filePath4);
+		
 		try 
 		{	
 			nnett.add(nnet = NeuralNetwork.load(stream));
@@ -70,7 +73,7 @@ public class Recognizing
 			if (stream1 != null) {stream1.close();}
 			if (stream2 != null) {stream2.close();}
 			if (stream3 != null) {stream3.close();}
-			if (stream4 != null) {stream4.close();}		
+			if (stream4 != null) {stream4.close();}
 		}
 
 	}
@@ -83,7 +86,16 @@ public class Recognizing
     public Recognizing(String file){
     	try 
 		{
-    		nnet = NeuralNetwork.createFromFile(file);
+    		File folder = new File("D:\\Git\\Rep\\Recognizer\\src\\main\\java\\pl\\wwsis\\MSI\\Resources\\");
+    		File[] listOfFiles = folder.listFiles();
+
+    		for (File f : listOfFiles) {
+    		    if (f.isFile()) {
+    		    	if(Image_Filter.getExtension(f).equals("nnet"))
+    		    	nnett.add(NeuralNetwork.createFromFile(f));
+    		    }
+    		}
+//    		nnet = NeuralNetwork.createFromFile(file);
     		
 		}
 		catch(Exception e) 
@@ -110,6 +122,7 @@ public class Recognizing
 		{
 			try {
 				String result = ""; int i = 0;
+				resultsMap.clear();
 				for (NeuralNetwork nn : nnett )
 				{	
 					i++;
@@ -167,7 +180,7 @@ public class Recognizing
 //			System.out.println(outputMap.toString());
 			for (Entry<String, Double> entry : outputMap.entrySet()) {
 	            if (entry.getValue()==maxValueInMap) {
-	                System.out.println(entry.getKey());
+	                System.out.println(entry.getKey() + ", " + entry.getValue() + ", " + imageRecognition.getParentNetwork().toString());
 	            	resultsMap.put(entry.getKey(), entry.getValue());
 //	                return entry.getKey() + ": " + entry.getValue();
 	            }
