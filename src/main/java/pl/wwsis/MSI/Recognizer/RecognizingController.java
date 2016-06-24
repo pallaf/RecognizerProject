@@ -1,4 +1,5 @@
 package pl.wwsis.MSI.Recognizer;
+
 import java.io.File;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
