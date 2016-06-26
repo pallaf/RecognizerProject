@@ -32,7 +32,6 @@ public class DataSetCreator {
 	{
 		this.preaperingImagesForTrainingSet(filePathToFolder);
 		this.createDataSet();
-		this.addJunkImages();
 	}
 // ---------------------------------------------------------------------------------------------------------------	
 	private void preaperingImagesForTrainingSet(String filePathToFolder)
@@ -50,6 +49,7 @@ public class DataSetCreator {
 	{
 		Map<String, FractionRgbData> imageRgbData = ImageUtilities.getFractionRgbDataForImages (imagesMap);
 		this.dataSet = ImageRecognitionHelper.createBlackAndWhiteTrainingSet (imageLabels, imageRgbData);
+		addJunkImages(dataSet.getOutputSize());
 	}
 
 // ---------------------------------------------------------------------------------------------------------------	
@@ -65,28 +65,36 @@ public class DataSetCreator {
 	}
 
 // ---------------------------------------------------------------------------------------------------------------	
-	private void addJunkImages()
+	private void addJunkImages(int j)
 	{
 		// Adding the black and white "not to recognize" images
-		double [] inputWhite = new double [34 * 56];
-		for (int i = 0; i < (34 * 56); ++i)
+		double [] inputWhite = new double [20 * 20];
+		for (int i = 0; i < (20 * 20); ++i)
 		{    
 			inputWhite [i] = 1;
 			}
-		double [] outputWhite = { 0, 0, 0, 0, 0, 0 };
+		double [] outputWhite = new double[j];
+		for (int i = 0; i < j; ++i)
+		{    
+			outputWhite [i] = 0;
+		}
 		dataSet.addRow (inputWhite, outputWhite);
-		double [] inputBlack = new double [34 * 56];
-		for (int i = 0; i < (34 * 56); ++i)
+		double [] inputBlack = new double [20 * 20];
+		for (int i = 0; i < (20 * 20); ++i)
 		{    
 			inputBlack [i] = 0;
 			}
-		double [] outputBlack = { 0, 0, 0, 0, 0, 0 };
+		double [] outputBlack = new double[j];
+		for (int i = 0; i < j; ++i)
+		{    
+			outputBlack [i] = 0;
+		}
 		dataSet.addRow (inputBlack, outputBlack);
 	}
 
 // ---------------------------------------------------------------------------------------------------------------	
-	public static void main(String args[])
-	{
-		new DataSetCreator(null);
-	}
+//	public static void main(String args[])
+//	{
+//		new DataSetCreator(null);
+//	}
 }

@@ -125,12 +125,11 @@ public class Recognizing
 			if (stream2 != null) {stream2.close();}
 			if (stream3 != null) {stream3.close();}
 			if (stream4 != null) {stream4.close();}
-
 			if (stream5 != null) {stream5.close();}
 			if (stream6 != null) {stream6.close();}
 			if (stream7 != null) {stream7.close();}
 			if (stream8 != null) {stream8.close();}
-			if (stream8 != null) {stream9.close();}
+			if (stream9 != null) {stream9.close();}
 		}
 	}
 	
@@ -375,6 +374,7 @@ public class Recognizing
 		for (File file : folder.listFiles ())
 		{
 			imageFolderPaths.add(file.getPath());
+			System.out.println(file.getName());
 		}
 	}
 	
@@ -435,24 +435,7 @@ public class Recognizing
 			{
     			DataSet d = new DataSetCreator(path).getDataSet();
     			trainingSetList.add(d);
-			}
-//    		trainingSetList.clear();
-//    		File folder = new File(filePathToFolder+"dataSets\\");
-//    		File[] listOfFiles = folder.listFiles();
-//    		
-//    		for (File f : listOfFiles) 
-//    		{
-//    		    if (f.isFile()) 
-//    		    {
-//    		    	System.out.println(f);
-//    		    	if(Image_Filter.getExtension(f).equals("tset"))
-//    		    	{
-//    		    		System.out.println(f.getName() + ", " + f.getPath());
-//    		    		trainingSetList.add(creatTrainingDataSet(f.getName()));
-//    		    	}
-//    		    }
-//    		}
-		}
+			}		}
 		catch(Exception e) 
 		{
 //			log.log( Level.SEVERE, e.toString(), e);
@@ -465,24 +448,6 @@ public class Recognizing
      * return DataSet ready for training 
      */
 // ---------------------------------------------------------------------------------------------------------------	
-		@SuppressWarnings("static-access")
-		private DataSet creatTrainingDataSet(String fileName)
-	    {
-			try
-			{
-				String filePath = "dataSets\\" + fileName;
-				DataSet dataSet = new DataSet(4800,10).createFromFile(filePath, 4800, 10, null);
-				return dataSet;
-			}
-			catch(Exception e)
-			{
-//				log.log( Level.SEVERE, e.toString(), e);
-				e.printStackTrace();
-			}
-			return null;
-	    }
-
-// ---------------------------------------------------------------------------------------------------------------		
 	public static void printMap(Map<String, Double> sortedMapAsc2)
     {
         for (Entry<String, Double> entry : sortedMapAsc2.entrySet())
