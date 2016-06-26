@@ -14,7 +14,7 @@ import org.neuroph.imgrec.image.Dimension;
 import org.neuroph.util.TransferFunctionType;
 
 /**
- * @author PiotrAllaf
+ *
  *
  */
 public class NeuralNetworkCreator
@@ -28,11 +28,9 @@ public class NeuralNetworkCreator
 		layers.add (12);
 		nn = ImageRecognitionHelper.createNewNeuralNetwork ("recognition", new Dimension (20,20), ColorMode.BLACK_AND_WHITE, imageLabels, layers, TransferFunctionType.SIGMOID);
 	}
-	
+// ---------------------------------------------------------------------------------------------------------------	
 	public NeuralNetwork<LearningRule> getNeuralNetwork()
 	{
 		return nn;
-		
-		
 	}
 }

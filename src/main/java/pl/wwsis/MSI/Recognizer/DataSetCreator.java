@@ -17,7 +17,7 @@ import org.neuroph.imgrec.ImageRecognitionHelper;
 import org.neuroph.imgrec.ImageUtilities;
 
 /**
- * @author PiotrAllaf
+ * 
  *
  */
 public class DataSetCreator {
@@ -34,7 +34,7 @@ public class DataSetCreator {
 		this.createDataSet();
 		this.addJunkImages();
 	}
-	
+// ---------------------------------------------------------------------------------------------------------------	
 	private void preaperingImagesForTrainingSet(String filePathToFolder)
 	{	
 		folder = new File (filePathToFolder);
@@ -45,26 +45,28 @@ public class DataSetCreator {
 		}
 	}
 	
+// ---------------------------------------------------------------------------------------------------------------	
 	private void createDataSet()
 	{
 		Map<String, FractionRgbData> imageRgbData = ImageUtilities.getFractionRgbDataForImages (imagesMap);
 		this.dataSet = ImageRecognitionHelper.createBlackAndWhiteTrainingSet (imageLabels, imageRgbData);
 	}
-	
+
+// ---------------------------------------------------------------------------------------------------------------	
 	public List<String> getImageLabels()
 	{
 		return imageLabels;
 	}
-	
+
+// ---------------------------------------------------------------------------------------------------------------	
 	public DataSet getDataSet()
 	{
 		return dataSet;
 	}
-	
+
+// ---------------------------------------------------------------------------------------------------------------	
 	private void addJunkImages()
 	{
-		
-
 		// Adding the black and white "not to recognize" images
 		double [] inputWhite = new double [34 * 56];
 		for (int i = 0; i < (34 * 56); ++i)
@@ -81,7 +83,8 @@ public class DataSetCreator {
 		double [] outputBlack = { 0, 0, 0, 0, 0, 0 };
 		dataSet.addRow (inputBlack, outputBlack);
 	}
-	
+
+// ---------------------------------------------------------------------------------------------------------------	
 	public static void main(String args[])
 	{
 		new DataSetCreator(null);
