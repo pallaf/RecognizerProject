@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -22,8 +23,10 @@ import java.util.TreeMap;
 import javax.swing.JOptionPane;
 
 import org.neuroph.imgrec.ImageRecognitionPlugin;
-
+import org.neuroph.nnet.learning.MomentumBackpropagation;
 import org.neuroph.core.NeuralNetwork;
+import org.neuroph.core.data.DataSet;
+import org.neuroph.core.learning.LearningRule;
 
 /*
  *Class Recognizing
@@ -32,11 +35,11 @@ public class Recognizing
 {
 	
 	private String filePathToFolder = "D:\\Git\\Rep\\Recognizer\\src\\main\\java\\pl\\wwsis\\MSI\\Resources\\";
-//	private String filePath, filePath1, filePath2, filePath3, filePath4, filePath5, filePath6, filePath7, filePath8;
-//	private String[] filePathes= {filePath, filePath1, filePath2, filePath3, filePath4, filePath5, filePath6, filePath7, filePath8};
+//	private String filePath, filePath1, filePath2, filePath3, filePath4, filePath5, filePath6, filePath7, filePath8, filePath9;
+//	private String[] filePathes= {filePath, filePath1, filePath2, filePath3, filePath4, filePath5, filePath6, filePath7, filePath8, filePath9};
 	private String[] filePathes;
 
-	private String  filePath = filePathToFolder + "firstNN.nnet";
+	private String  filePath = filePathToFolder  + "firstNN.nnet";
 	private String	filePath1 = filePathToFolder + "calibri_net.nnet";
 	private String	filePath2 = filePathToFolder + "chiller_net.nnet";
 	private String  filePath3 = filePathToFolder + "handwitten_net.nnet";
@@ -44,7 +47,8 @@ public class Recognizing
 	private String  filePath5 = filePathToFolder + "numI_nn.nnet";
 	private String  filePath6 = filePathToFolder + "numII_nn.nnet";
 	private String  filePath7 = filePathToFolder + "numIII_nn.nnet";
-//	private String  filePath8 = filePathToFolder + "numIV_nn.nnet";
+	private String  filePath8 = filePathToFolder + "newComboNetwork.nnet";
+	private String  filePath9 = filePathToFolder + "newHyperComboNetwork.nnet";
 	
 	
 //	private static final Logger log= Logger.getLogger(Recognizing.class.getName());
@@ -53,17 +57,19 @@ public class Recognizing
 
 	private static ImageRecognitionPlugin imageRecognition;
 	@SuppressWarnings({ "unused", "rawtypes" })
-	private NeuralNetwork nnet, nnet1, nnet2, nnet3, nnet4, nnet5, nnet6, nnet7;
+	private NeuralNetwork nnet, nnet1, nnet2, nnet3, nnet4, nnet5, nnet6, nnet7, nnet8, nnet9;
 	@SuppressWarnings("rawtypes")
-	private Set<NeuralNetwork> nnett = new HashSet<NeuralNetwork>();
+	private Set<NeuralNetwork> nnett 			 = new HashSet<NeuralNetwork>();
 	@SuppressWarnings("unused")
 	private InputStream nnetStream;
 	
-	private Map<String, Double> resultsMap = new TreeMap<String, Double>();
+	private Map<String, Double> resultsMap 		 = new TreeMap<String, Double>();
 	
-	private Map<String, Double> resultsAvrMap = new HashMap<String, Double>();
-	private List<String> dupliList = new LinkedList<String>();
-	Map<String, Double> sortedMapAsc = new LinkedHashMap<String, Double>();
+	private Map<String, Double> resultsAvrMap 	 = new HashMap<String, Double>();
+	private List<String> dupliList				 = new LinkedList<String>();
+	private Map<String, Double> sortedMapAsc 	 = new LinkedHashMap<String, Double>();
+	private List<DataSet> trainingSetList 		 = new ArrayList<DataSet>();
+	private List<String> imageFolderPaths 		 = new ArrayList<String>();
 	
 	/*
 	 *Recognizing Constructor
@@ -74,28 +80,36 @@ public class Recognizing
 	public Recognizing() throws IOException
 	{
 //		setFilePathes();
-		FileInputStream stream = new FileInputStream(filePath);
+		FileInputStream stream  = new FileInputStream(filePath);
 		FileInputStream stream1 = new FileInputStream(filePath1);
 		FileInputStream stream2 = new FileInputStream(filePath2);
 		FileInputStream stream3 = new FileInputStream(filePath3);
+//		FileInputStream stream4 = new FileInputStream(filePath4);
 		FileInputStream stream4 = new FileInputStream(filePath4);
-
 		FileInputStream stream5 = new FileInputStream(filePath5);
 		FileInputStream stream6 = new FileInputStream(filePath6);
 		FileInputStream stream7 = new FileInputStream(filePath7);
-//		FileInputStream stream8 = new FileInputStream(filePath8);
+		FileInputStream stream8 = new FileInputStream(filePath8);
+		FileInputStream stream9 = new FileInputStream(filePath9);
 		
 		try 
 		{	
+			creatTrainingDataSetMap();
+			creatPathsImageFolderList();
 			nnett.add(nnet = NeuralNetwork.load(stream));
 			nnett.add(nnet1 = NeuralNetwork.load(stream1));
 			nnett.add(nnet2 = NeuralNetwork.load(stream2));
 			nnett.add(nnet3 = NeuralNetwork.load(stream3));
 			nnett.add(nnet4 = NeuralNetwork.load(stream4));
+//			nnet4 = nnLearning(NeuralNetwork.load(stream4));
+//			nnett.add(nnet4);
 			nnett.add(nnet5 = NeuralNetwork.load(stream5));
 			nnett.add(nnet6 = NeuralNetwork.load(stream6));
 			nnett.add(nnet7 = NeuralNetwork.load(stream7));
-//			nnett.add(nnet8 = NeuralNetwork.load(stream8));
+//			nnet7 = nnLearning(NeuralNetwork.load(stream7));
+//			nnett.add(nnet7);
+			nnett.add(nnet8 = nnLearning(NeuralNetwork.load(stream8)));
+			nnett.add(nnet9 = NeuralNetwork.load(stream9));
 		}
 		catch(Exception e) 
 		{
@@ -115,7 +129,8 @@ public class Recognizing
 			if (stream5 != null) {stream5.close();}
 			if (stream6 != null) {stream6.close();}
 			if (stream7 != null) {stream7.close();}
-//			if (stream8 != null) {stream8.close();}
+			if (stream8 != null) {stream8.close();}
+			if (stream8 != null) {stream9.close();}
 		}
 	}
 	
@@ -125,7 +140,8 @@ public class Recognizing
 	 *@param NeuralNetwork 	nnet	The neural network for the recognition
 	 */
 // ---------------------------------------------------------------------------------------------------------------		
-    public Recognizing(String file){
+    public Recognizing(String file)
+    {
     	try 
 		{
     		File folder = new File(filePathToFolder);
@@ -192,15 +208,24 @@ public class Recognizing
 		}
 	}
 	
+	/*
+	 *Getter for number recognition result for each inputed nn
+	 *getting args  ImageRecognitionPlugin and File
+	 *Collects pares(number, result for this number) in resultsMap
+	 * sortedMapAsc is a sorted resultsMap
+ 	 */
 // ---------------------------------------------------------------------------------------------------------------		
-	private void getNumRecoForEachFont(ImageRecognitionPlugin imageRecognition, File image){
-		
-		try {
+	private void getNumRecoForEachFont(ImageRecognitionPlugin imageRecognition, File image)
+	{
+		try 
+		{
 			//image recognition is done here (specify some existing image file)
 			HashMap<String, Double> outputMap = imageRecognition.recognizeImage(image);
 			Double maxValueInMap=(Collections.max(outputMap.values()));
-			for (Entry<String, Double> entry : outputMap.entrySet()) {
-	            if (entry.getValue()==maxValueInMap) {
+			for (Entry<String, Double> entry : outputMap.entrySet()) 
+			{
+	            if (entry.getValue()==maxValueInMap) 
+	            {
 	                System.out.println(entry.getKey() + ", " + entry.getValue() + ", " + imageRecognition.getParentNetwork().toString());
 	            	resultsMap.put(entry.getKey(), entry.getValue());
 	            }
@@ -215,16 +240,24 @@ public class Recognizing
 		}
 	}
 	
-	
+	/*
+	 * Method for setting file paths for nn files 
+	 * filter Extensions for nnet
+	 * 
+	 */
 // ---------------------------------------------------------------------------------------------------------------		
-	void setFilePathes(){
+	void setFilePathes()
+	{
 		
 		File folder = new File(filePathToFolder);
 		File[] listOfFiles = folder.listFiles();
 
-		for (@SuppressWarnings("unused") String s : filePathes) {
-			for (File f : listOfFiles) {
-				if (f.isFile()) {
+		for (@SuppressWarnings("unused") String s : filePathes)
+		{
+			for (File f : listOfFiles)
+			{
+				if (f.isFile())
+				{
 					if(Image_Filter.getExtension(f).equals("nnet"))
 						s = f.getPath();
 				}
@@ -232,13 +265,21 @@ public class Recognizing
 		}
 	}
 	
+	/*
+	 * Method for looking for duplicates in the result map
+	 * to check if there is a nn recognition result duplicates
+	 * for different nn
+	 */
 // ---------------------------------------------------------------------------------------------------------------		
-	private void lookingForResult(){
+	private void lookingForResult()
+	{
 		resultsAvrMap.clear();
 		@SuppressWarnings("unused")
 		Double maxValueInMap=(Collections.max(resultsMap.values()));
-		for (Entry<String, Double> entry : resultsMap.entrySet()) {
-            if (entry.getValue()>0.8) {
+		for (Entry<String, Double> entry : resultsMap.entrySet()) 
+		{
+            if (entry.getValue()>0.8)
+            {
                	resultsAvrMap.put(entry.getKey(), entry.getValue());
             }
 		}
@@ -246,22 +287,37 @@ public class Recognizing
 		System.out.println(mostDuplKey());
 	}
 	
+	/*
+	 * method for finding most duplicte key values 
+	 * is adding keyes to duplicatelist from the resultAvrMAp
+	 * and return the list with most duplicate values
+	 */
 // ---------------------------------------------------------------------------------------------------------------	
-	private Set<String> mostDuplKey(){
-		for (Entry<String, Double> entry : resultsAvrMap.entrySet()) {
+	private Set<String> mostDuplKey()
+	{
+		for (Entry<String, Double> entry : resultsAvrMap.entrySet()) 
+		{
             dupliList.add(entry.getKey());
 		}
 //		log.log( Level.FINE, "Zwraca mape z elementami duplikowanymi: " + dupliList , dupliList.size() );
 		return findDuplicates(dupliList);
 	}
 	
+	/*
+	 *Method for finding duplicates in the list
+	 *By input param listContaningDuplicates
+	 *HashSet - is set which doesn't allow duplicates values
+	 *return set with duplicate values   
+	 */
 // ---------------------------------------------------------------------------------------------------------------
-	private Set<String> findDuplicates(List<String> listContainingDuplicates) {
-			 
+	private Set<String> findDuplicates(List<String> listContainingDuplicates) 
+	{
 		Set<String> setToReturn = new HashSet<String>();
 		Set<String> set1 = new HashSet<String>();
-	 	for (String yourInt : listContainingDuplicates) {
-			if (!set1.add(yourInt)) {
+	 	for (String yourInt : listContainingDuplicates) 
+	 	{
+			if (!set1.add(yourInt)) 
+			{
 				setToReturn.add(yourInt);
 			}
 		}
@@ -269,6 +325,12 @@ public class Recognizing
 		return setToReturn;
 	}
 	
+	/*
+	 * Sorting method
+	 * For sorting map elements by value 
+	 * Greatest first
+	 * return sorted Map 
+	 */
 // ---------------------------------------------------------------------------------------------------------------	
 	private static Map<String, Double> sortByComparator(Map<String, Double> unsortMap)
     {
@@ -293,6 +355,132 @@ public class Recognizing
 
         return sortedMap;
     }
+	
+	/*
+	 * Create Neural Network Manually
+	 */
+// ---------------------------------------------------------------------------------------------------------------		
+	private  NeuralNetwork<LearningRule> createNeuralNetworkManually(String path){
+		 NeuralNetworkCreator newNN = new NeuralNetworkCreator(new DataSetCreator(path).getImageLabels());
+		 return newNN.getNeuralNetwork();
+	}
+	
+	/*
+	 * creat Paths Image Folder List
+	 */
+// ---------------------------------------------------------------------------------------------------------------		
+ 	private void creatPathsImageFolderList()
+	{
+ 		File folder = new File(filePathToFolder + "jpg\\");
+		for (File file : folder.listFiles ())
+		{
+			imageFolderPaths.add(file.getPath());
+		}
+	}
+	
+	/*
+	 * learn and save new learned nn
+	 */
+// ---------------------------------------------------------------------------------------------------------------		
+    @SuppressWarnings("rawtypes")
+	public NeuralNetwork nnLearning(String path)
+    {	
+    	NeuralNetwork<LearningRule> n = createNeuralNetworkManually(path);
+    	MomentumBackpropagation learning = (MomentumBackpropagation) n.getLearningRule ();
+    	learning.setLearningRate (0.2);
+    	learning.setMaxError (0.01);
+    	learning.setMaxIterations (0);
+    	learning.setMomentum (0.7);
+
+    	for (DataSet dSet : trainingSetList)
+    	{
+    		n.learn(dSet);
+    	}
+    	n.save(filePathToFolder + "newHyperComboNetworkCreatedManually.nnet"); 
+    	return n;
+    }
+
+	/*
+	 * learn and save new learned nn
+	 */
+// ---------------------------------------------------------------------------------------------------------------		
+    @SuppressWarnings("rawtypes")
+	public NeuralNetwork nnLearning(NeuralNetwork n)
+    {	
+    	MomentumBackpropagation learning = (MomentumBackpropagation) n.getLearningRule ();
+    	learning.setLearningRate (0.2);
+    	learning.setMaxError (0.01);
+    	learning.setMaxIterations (0);
+    	learning.setMomentum (0.7);
+
+    	for (DataSet dSet : trainingSetList)
+    	{
+    		n.learn(dSet);
+    	}
+    	n.save("newHyperComboNetwork.nnet"); 
+    	return n;
+    }
+    
+    /*
+     *TrainingSetList clear
+     *Extension filter
+     *Adding DataSet.test files as training sets to  trainingSetList
+     */
+// ---------------------------------------------------------------------------------------------------------------		
+    public void creatTrainingDataSetMap()
+    {
+    	try 
+		{
+    		for (String path: imageFolderPaths)
+			{
+    			DataSet d = new DataSetCreator(path).getDataSet();
+    			trainingSetList.add(d);
+			}
+//    		trainingSetList.clear();
+//    		File folder = new File(filePathToFolder+"dataSets\\");
+//    		File[] listOfFiles = folder.listFiles();
+//    		
+//    		for (File f : listOfFiles) 
+//    		{
+//    		    if (f.isFile()) 
+//    		    {
+//    		    	System.out.println(f);
+//    		    	if(Image_Filter.getExtension(f).equals("tset"))
+//    		    	{
+//    		    		System.out.println(f.getName() + ", " + f.getPath());
+//    		    		trainingSetList.add(creatTrainingDataSet(f.getName()));
+//    		    	}
+//    		    }
+//    		}
+		}
+		catch(Exception e) 
+		{
+//			log.log( Level.SEVERE, e.toString(), e);
+			e.printStackTrace();
+		}
+    }
+    
+    /*
+     * Creating DataSet for training from existing file by putting fileName for the dataSet
+     * return DataSet ready for training 
+     */
+// ---------------------------------------------------------------------------------------------------------------	
+		@SuppressWarnings("static-access")
+		private DataSet creatTrainingDataSet(String fileName)
+	    {
+			try
+			{
+				String filePath = "dataSets\\" + fileName;
+				DataSet dataSet = new DataSet(4800,10).createFromFile(filePath, 4800, 10, null);
+				return dataSet;
+			}
+			catch(Exception e)
+			{
+//				log.log( Level.SEVERE, e.toString(), e);
+				e.printStackTrace();
+			}
+			return null;
+	    }
 
 // ---------------------------------------------------------------------------------------------------------------		
 	public static void printMap(Map<String, Double> sortedMapAsc2)
