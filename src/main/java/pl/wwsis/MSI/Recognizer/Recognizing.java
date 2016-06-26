@@ -39,7 +39,7 @@ public class Recognizing
 //	private String[] filePathes= {filePath, filePath1, filePath2, filePath3, filePath4, filePath5, filePath6, filePath7, filePath8, filePath9};
 	private String[] filePathes;
 
-	private String  filePath = filePathToFolder  + "firstNN.nnet";
+	private String  filePath  = filePathToFolder + "firstNN.nnet";
 	private String	filePath1 = filePathToFolder + "calibri_net.nnet";
 	private String	filePath2 = filePathToFolder + "chiller_net.nnet";
 	private String  filePath3 = filePathToFolder + "handwitten_net.nnet";
