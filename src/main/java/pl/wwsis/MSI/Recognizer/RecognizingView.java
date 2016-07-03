@@ -41,6 +41,12 @@ public class RecognizingView extends JFrame
 	private JMenuItem 	recognize;
 	private JMenuItem 	exit;
 	
+	//elements for Edit
+	@SuppressWarnings("unused")
+	private JMenu 		edit;
+	private JMenuItem 	createNN;
+//	private JMenuItem 	testNN;
+	
 	/*
 	 *Constructor for RecognizingView class
 	 *@param name Used to set the title on the JFrame
@@ -55,12 +61,19 @@ public class RecognizingView extends JFrame
 		JMenuBar menu = new JMenuBar();
 		
 		JMenu file = new JMenu("File");	file.setMnemonic('F');
+		JMenu edit = new JMenu("Edit");	edit.setMnemonic('E');
+		
 		open = new JMenuItem("Open"); open.setMnemonic('O'); file.add(open);
 		recognize = new JMenuItem("Recognize"); recognize.setMnemonic('R'); file.add(recognize);
 		file.addSeparator();
 		exit = new JMenuItem("Exit"); exit.setMnemonic('x'); file.add(exit);
 		
+		createNN = new JMenuItem("Creat NN"); createNN.setMnemonic('C'); edit.add(createNN);
+//		testNN = new JMenuItem("Test NN"); createNN.setMnemonic('T'); edit.add(testNN);
+		
 		menu.add(file);
+		menu.add(edit);
+		
 		setJMenuBar(menu);
 		
 		// display rules
@@ -87,6 +100,16 @@ public class RecognizingView extends JFrame
 	 */
 // ---------------------------------------------------------------------------------------------------------------	
 	public JMenuItem	getExit()		{ return exit;				}
+	/*
+	 *@return The menu item 'Create NN'
+	 */
+// ---------------------------------------------------------------------------------------------------------------	
+	public JMenuItem	getCreateNN()	{ return createNN;			}
+	/*
+	 *@return The menu item 'Test NN'
+	 */
+// ---------------------------------------------------------------------------------------------------------------	
+//	public JMenuItem	getTestNN()	{ return testNN;			}
 	/*
 	 *@return The JLabel containing the image to recognize text from
 	 */

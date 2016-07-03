@@ -36,10 +36,13 @@ public class DataSetCreator {
 // ---------------------------------------------------------------------------------------------------------------	
 	private void preaperingImagesForTrainingSet(String filePathToFolder)
 	{	
+		String extension = "";
 		folder = new File (filePathToFolder);
 		for (File file : folder.listFiles ())
 		{
-			imageLabels.add (file.getName ().replace (".jpg", ""));
+			if (Image_Filter.getExtension(file).equals("jpg")) {extension = ".jpg";};
+			if (Image_Filter.getExtension(file).equals("png")) {extension = ".png";};
+			imageLabels.add (file.getName ().replace (extension, ""));
 			imagesMap.put (file.getName (), ImageUtilities.resizeImage (ImageUtilities.loadImage (file), 20, 20));
 		}
 	}

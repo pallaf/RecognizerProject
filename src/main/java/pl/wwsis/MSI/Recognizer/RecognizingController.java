@@ -33,10 +33,13 @@ public class RecognizingController
 	private JMenuItem 	open;
 	private JMenuItem 	recognize;
 	private JMenuItem 	exit;
+	private JMenuItem 	createNN;
+
 	//action event classes
 	private Open			opn;
 	private Recognize		rcg;
 	private RecognizeButton	rcgButton;
+	private CreateNN	ctnn;
 	//recognize variable
 	@SuppressWarnings("unused")
 	private String			stat_path = "";
@@ -69,6 +72,7 @@ public class RecognizingController
 		open			= view.getOpen();
 		recognize		= view.getRecognize();
 		exit			= view.getExit();
+		createNN        = view.getCreateNN();
 		
 		//assign action events
 		opn = new Open();
@@ -78,6 +82,8 @@ public class RecognizingController
 		exit.addActionListener(new Exit());
 		rcgButton = new RecognizeButton();
 		recognizeButton.addActionListener(rcgButton);
+		ctnn = new CreateNN();
+		createNN.addActionListener(ctnn);
 		
 		//open view as default
 		open_view();
@@ -184,6 +190,23 @@ public class RecognizingController
 				String result = model.getRecognitionResult(getImage());
 				JOptionPane.showMessageDialog(null, "The number on the image is: " + result,"Result",JOptionPane.INFORMATION_MESSAGE);
 			}
+		}
+	}
+	/*
+	 *CreateNN Class - handles the chars recognizing
+	 */
+	
+// ---------------------------------------------------------------------------------------------------------------	
+	private class CreateNN implements ActionListener
+	{
+		/*
+		 *handles the click event
+		 *@param e The ActionEvent Object
+		 */
+		public void actionPerformed(ActionEvent e)
+		{
+				model.nnLearning(model.getFilePathToFolder());
+				JOptionPane.showMessageDialog(null, "New NN successfully created!","Result",JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	/*

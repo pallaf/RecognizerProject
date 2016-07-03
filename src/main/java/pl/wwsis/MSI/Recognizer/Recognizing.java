@@ -96,7 +96,7 @@ public class Recognizing
 		{	
 			creatTrainingDataSetMap();
 			creatPathsImageFolderList();
-			nnett.add(nnet = NeuralNetwork.load(stream));
+			nnett.add(nnet  = NeuralNetwork.load(stream));
 			nnett.add(nnet1 = NeuralNetwork.load(stream1));
 			nnett.add(nnet2 = NeuralNetwork.load(stream2));
 			nnett.add(nnet3 = NeuralNetwork.load(stream3));
@@ -108,8 +108,8 @@ public class Recognizing
 			nnett.add(nnet7 = NeuralNetwork.load(stream7));
 //			nnet7 = nnLearning(NeuralNetwork.load(stream7));
 //			nnett.add(nnet7);
-			nnett.add(nnet8 = nnLearning(NeuralNetwork.load(stream8)));
-			nnett.add(nnet9 = NeuralNetwork.load(stream9));
+			nnett.add(nnet8 = NeuralNetwork.load(stream8));
+			nnett.add(nnet9 = nnLearning(NeuralNetwork.load(stream9)));
 		}
 		catch(Exception e) 
 		{
@@ -184,9 +184,11 @@ public class Recognizing
 					getNumRecoForEachFont(imageRecognition, image);
 				}
 				lookingForResult();
+				java.text.DecimalFormat df=new java.text.DecimalFormat("0.00000000000000");
 				Double maxValueInMap=(Collections.max(sortedMapAsc.values()));
 				for (Entry<String, Double> entry : sortedMapAsc.entrySet()) {
-		            if (entry.getValue().equals(maxValueInMap)) {
+		            if (df.format(entry.getValue()).equals(df.format(maxValueInMap))) {
+		            	System.out.println(entry.getKey() + ": " + entry.getValue());
 //		            	log.log( Level.FINE, "Koncowy wynik rozpoznawania: " + entry.getKey() + ": " + entry.getValue());
 		                return entry.getKey() + ": " + entry.getValue();
 		            }
@@ -374,10 +376,18 @@ public class Recognizing
 		for (File file : folder.listFiles ())
 		{
 			imageFolderPaths.add(file.getPath());
-			System.out.println(file.getName());
 		}
 	}
 	
+	/*
+	 * create NN Paths Image Folder List
+	 */
+// ---------------------------------------------------------------------------------------------------------------		
+ 	public String getFilePathToFolder()
+ 	{
+ 		return filePathToFolder;
+ 	}
+ 	
 	/*
 	 * learn and save new learned nn
 	 */
@@ -385,7 +395,8 @@ public class Recognizing
     @SuppressWarnings("rawtypes")
 	public NeuralNetwork nnLearning(String path)
     {	
-    	NeuralNetwork<LearningRule> n = createNeuralNetworkManually(path);
+    	String pathNew = path + "jpg\\numsV2\\";
+    	NeuralNetwork<LearningRule> n = createNeuralNetworkManually(pathNew);
     	MomentumBackpropagation learning = (MomentumBackpropagation) n.getLearningRule ();
     	learning.setLearningRate (0.2);
     	learning.setMaxError (0.01);
