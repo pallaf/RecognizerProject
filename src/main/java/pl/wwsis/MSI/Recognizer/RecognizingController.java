@@ -206,7 +206,7 @@ public class RecognizingController
 		public void actionPerformed(ActionEvent e)
 		{
 				model.nnLearning(model.getFilePathToFolder());
-				JOptionPane.showMessageDialog(null, "New NN successfully created!","Result",JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "New NN successfully created!","Result",JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 	/*
