@@ -43,7 +43,8 @@ public class Recognizing
 	private String	filePath1 = filePathToFolder + "calibri_net.nnet";
 	private String	filePath2 = filePathToFolder + "chiller_net.nnet";
 	private String  filePath3 = filePathToFolder + "handwitten_net.nnet";
-	private String	filePath4 = filePathToFolder + "secondhandwitten_net.nnet";
+//	private String	filePath4 = filePathToFolder + "secondhandwitten_net.nnet";
+	private String	filePath4 = filePathToFolder + "newHyperComboNetworkCreatedManually.nnet";
 	private String  filePath5 = filePathToFolder + "numI_nn.nnet";
 	private String  filePath6 = filePathToFolder + "numII_nn.nnet";
 	private String  filePath7 = filePathToFolder + "numIII_nn.nnet";
@@ -100,9 +101,9 @@ public class Recognizing
 			nnett.add(nnet1 = NeuralNetwork.load(stream1));
 			nnett.add(nnet2 = NeuralNetwork.load(stream2));
 			nnett.add(nnet3 = NeuralNetwork.load(stream3));
-			nnett.add(nnet4 = NeuralNetwork.load(stream4));
-//			nnet4 = nnLearning(NeuralNetwork.load(stream4));
-//			nnett.add(nnet4);
+//			nnett.add(nnet4 = NeuralNetwork.load(stream4));
+			nnet4 = nnLearning(NeuralNetwork.load(stream4));
+			nnett.add(nnet4);
 			nnett.add(nnet5 = NeuralNetwork.load(stream5));
 			nnett.add(nnet6 = NeuralNetwork.load(stream6));
 			nnett.add(nnet7 = NeuralNetwork.load(stream7));
@@ -402,7 +403,6 @@ public class Recognizing
     	learning.setMaxError (0.01);
     	learning.setMaxIterations (0);
     	learning.setMomentum (0.7);
-
     	for (DataSet dSet : trainingSetList)
     	{
     		n.learn(dSet);
